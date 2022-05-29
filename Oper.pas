@@ -100,6 +100,11 @@ begin
    for b:=0 to (Columns.Count-1) do
    begin
      WS.Cells[a+1, b+1].Value:=Columns[b].Field.AsString;
+     if Columns[b].Field.AsString='Направлен в цех на исполнение' then WS.Cells[a+1, b+1].Interior.Color:=RGB(0,255,255);
+     if Columns[b].Field.AsString='Задача выполнена ожидается проверка' then WS.Cells[a+1, b+1].Interior.Color:=RGB(255,255,0);
+     if Columns[b].Field.AsString='Возвращено на доработку' then WS.Cells[a+1, b+1].Interior.Color:=RGB(255,0,0);
+     if Columns[b].Field.AsString='Выполнено' then WS.Cells[a+1, b+1].Interior.Color:=RGB(192,192,192);
+     if Columns[b].Field.AsString='Принято в работу' then WS.Cells[a+1, b+1].Interior.Color:=RGB(0,255,0);
      WS.Cells[a+1,b+1].Borders[xlEdgeRight].LineStyle:=xlContinuous;
    end;
    DataSource.DataSet.Next;
@@ -152,14 +157,6 @@ if OperRole then MyQuery1.SQL.add('SELECT id as ''№'', Stat as ''Статус'', Zagla
 if MasterRole then MyQuery1.SQL.add('SELECT id as ''№'', Stat as ''Статус'', Zaglav as ''Заголовок'', Operator as ''Назначивший'', Task as ''Задача'', Data_sozd as ''Дата создания'', Data_vyp as ''Дата выполн.'', Comment as ''Комментарий'' FROM zadachi WHERE Mast = '+chr(39)+UserName+chr(39));
 MyQuery1.Open;
 
-//DBGrid1.Columns[0].Width:=35;     //ИД
-//DBGrid1.Columns[1].Width:=trunc((DBGrid1.Width-345)/4)-10;     //Статус
-//DBGrid1.Columns[2].Width:=trunc((DBGrid1.Width-345)/4)-10;    //Заголовок
-//DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
-//DBGrid1.Columns[4].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Задача
-//DBGrid1.Columns[5].Width:=120;    // Дата создания
-//DBGrid1.Columns[6].Width:=120;    // Дата выполнения
-//DBGrid1.Columns[7].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Коментарий
 SetDbgrid();
 end;
 
@@ -218,15 +215,7 @@ if OperRole then MyQuery1.SQL.add('SELECT id as ''№'', Stat as ''Статус'', Zagla
 if MasterRole then MyQuery1.SQL.add('SELECT id as ''№'', Stat as ''Статус'', Zaglav as ''Заголовок'', Operator as ''Назначивший'', Task as ''Задача'', Data_sozd as ''Дата создания'', Data_vyp as ''Дата выполн.'', Comment as ''Комментарий'' FROM zadachi WHERE Mast = '+chr(39)+UserName+chr(39));
 MyQuery1.Open;
 
-// Выставление ширины примерно
-//DBGrid1.Columns[0].Width:=35;     //ИД
-//DBGrid1.Columns[1].Width:=trunc((DBGrid1.Width-345)/4)-10;     //Статус
-//DBGrid1.Columns[2].Width:=trunc((DBGrid1.Width-345)/4)-10;    //Заголовок
-//DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
-//DBGrid1.Columns[4].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Задача
-//DBGrid1.Columns[5].Width:=120;    // Дата создания
-//DBGrid1.Columns[6].Width:=120;    // Дата выполнения
-//DBGrid1.Columns[7].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Коментарий
+
 SetDbgrid();
 
 if MasterRole then
@@ -241,14 +230,7 @@ procedure TformOper.FormResize(Sender: TObject);
 begin
 DBGrid1.Width:=formOper.Width-60;
 DBGrid1.Height:=formOper.Height-170;
-//DBGrid1.Columns[0].Width:=35;     //ИД
-//DBGrid1.Columns[1].Width:=trunc((DBGrid1.Width-345)/4)-10;     //Статус
-//DBGrid1.Columns[2].Width:=trunc((DBGrid1.Width-345)/4)-10;    //Заголовок
-//DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
-//DBGrid1.Columns[4].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Задача
-//DBGrid1.Columns[5].Width:=120;    // Дата создания
-//DBGrid1.Columns[6].Width:=120;    // Дата выполнения
-//DBGrid1.Columns[7].Width:=trunc((DBGrid1.Width-345)/4)-10;    // Коментарий
+
 SetDbgrid();
 end;
 
