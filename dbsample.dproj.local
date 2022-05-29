@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.578,=C:\Users\Пользователь\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.424,C:\Users\Пользователь\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\Oper.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.424,C:\Users\Пользователь\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\Oper.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.826,C:\Users\Admin\Desktop\Projects\dbsample\Login.pas=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.996,C:\Users\Admin\Desktop\Projects\dbsample\RedTask.dfm=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.996,C:\Users\Admin\Desktop\Projects\dbsample\RedTask.pas=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.929,C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\NewTask.pas=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.826,C:\Users\Admin\Desktop\Projects\dbsample\Login.dfm=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.494,=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.763,=C:\Users\Пользователь\Desktop\Projects\dbsample\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.385,=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.468,=C:\Users\Admin\Desktop\Projects\dbsample\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.246,C:\Users\Пользователь\Desktop\Projects\dbsample\Unit1.dfm=C:\Users\Пользователь\Desktop\Projects\dbsample\FilterOper.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.477,C:\Users\Пользователь\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\dbsample.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.246,C:\Users\Пользователь\Desktop\Projects\dbsample\Unit1.pas=C:\Users\Пользователь\Desktop\Projects\dbsample\FilterOper.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.929,C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\NewTask.dfm=C:\Users\Пользователь\Documents\RAD Studio\Projects\dbsample\Unit2.dfm</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="FilterOper.pas"/>
+    <File Path="FilterOper.dfm"/>
+    <File Path="Login.pas"/>
+    <File Path="Login.dfm"/>
+    <File Path="NewTask.pas"/>
+    <File Path="NewTask.dfm"/>
+    <File Path="Oper.pas"/>
+    <File Path="Oper.dfm"/>
+    <File Path="RedTask.pas"/>
+    <File Path="RedTask.dfm"/>
+  </ProjectSortOrder>
+</BorlandProject>

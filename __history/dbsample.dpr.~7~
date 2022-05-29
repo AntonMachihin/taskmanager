@@ -1,0 +1,20 @@
+program dbsample;
+
+uses
+  Vcl.Forms,
+  Oper in 'Oper.pas' {formOper},
+  NewTask in 'NewTask.pas' {formNewTask},
+  RedTask in 'RedTask.pas' {formRedTask},
+  FilterOper in 'FilterOper.pas' {formFilterOper};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TformOper, formOper);
+  Application.CreateForm(TformNewTask, formNewTask);
+  Application.CreateForm(TformRedTask, formRedTask);
+  Application.CreateForm(TformFilterOper, formFilterOper);
+  Application.Run;
+end.

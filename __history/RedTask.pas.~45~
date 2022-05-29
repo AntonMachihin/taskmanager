@@ -1,0 +1,296 @@
+unit RedTask;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Data.DB,
+  DBAccess, MyAccess, MemDS;
+
+type
+  TformRedTask = class(TForm)
+    memTask: TMemo;
+    edID: TEdit;
+    Label5: TLabel;
+    MyDataSource1: TMyDataSource;
+    MyQuery1: TMyQuery;
+    MyConnection1: TMyConnection;
+    btnCancel: TButton;
+    btnOK: TButton;
+    edZaglav: TEdit;
+    Label4: TLabel;
+    Label3: TLabel;
+    lbDes: TLabel;
+    Label1: TLabel;
+    edMaster: TEdit;
+    dtVupol: TDateTimePicker;
+    memComment: TMemo;
+    Label6: TLabel;
+    btnResend: TButton;
+    edStatus: TEdit;
+    Label7: TLabel;
+    btnAccept: TButton;
+    btnReject: TButton;
+    btnComplete: TButton;
+    procedure btnCancelClick(Sender: TObject);
+    procedure btnResendClick(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
+    procedure btnAcceptClick(Sender: TObject);
+    procedure btnRejectClick(Sender: TObject);
+    procedure btnCompleteClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  formRedTask: TformRedTask;
+
+implementation
+
+{$R *.dfm}
+uses Oper, Login;
+
+procedure TformRedTask.btnAcceptClick(Sender: TObject);
+var S:string;
+begin
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+S:= 'UPDATE zadachi Set Stat = ''Принято в работу'', '+
+' Comment = '+chr(39)+memComment.Lines.Text+chr(39)+' WHERE ID = '+ chr(39)+edID.Text+chr(39);
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+//Получение даты
+MyQuery1.SQL.Add('Select Data_sozd from zadachi where ID ='+ chr(39)+edID.Text+chr(39));
+MyQuery1.Open;
+//Ведение лога
+S:= 'Insert into log(idtask, Name, Zapis, Vrem) Values ('+ chr(39)+edID.Text+chr(39)+
+', '+chr(39)+UserName+chr(39)+', '+chr(39)+'Задача принята в работу: '
++edZaglav.Text+'; Формулировка: '+memTask.Lines.Text+'; Назначивший: '+
+edMaster.Text+'; Дата начала: '+formatdatetime('yyy-mm-dd',MyQuery1.FieldValues['Data_sozd'])+'; Дата выполнения: '+
+formatdatetime('yyy-mm-dd',dtVupol.Date)+'; Комментарий: '+memComment.Lines.Text+chr(39)+', NOW());';
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+
+formRedTask.Hide;
+formOper.MyQuery1.Close;
+formOper.MyQuery1.SQL.Clear;
+if MasterRole then formOper.MyQuery1.SQL.add('SELECT id, Stat, Zaglav, Operator, Task, Data_sozd, Data_vyp, Comment FROM zadachi WHERE Mast = '+chr(39)+UserName+chr(39));
+formOper.MyQuery1.Open;
+formOper.DBGrid1.Columns[0].Width:=25;     //ИД
+formOper.DBGrid1.Columns[1].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;     //Статус
+formOper.DBGrid1.Columns[2].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    //Заголовок
+formOper.DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
+formOper.DBGrid1.Columns[4].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Задача
+formOper.DBGrid1.Columns[5].Width:=100;    // Дата создания
+formOper.DBGrid1.Columns[6].Width:=100;    // Дата выполнения
+formOper.DBGrid1.Columns[7].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Коментарий
+end;
+
+procedure TformRedTask.btnCancelClick(Sender: TObject);
+begin
+formRedTask.Hide;
+end;
+
+procedure TformRedTask.btnCompleteClick(Sender: TObject);
+Var S:String;
+begin
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+S:= 'UPDATE zadachi Set Stat = ''Задача выполнена ожидается проверка'', '+
+' Comment = '+chr(39)+memComment.Lines.Text+chr(39)+' WHERE ID = '+ chr(39)+edID.Text+chr(39);
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+//Получение даты
+MyQuery1.SQL.Add('Select Data_sozd from zadachi where ID ='+ chr(39)+edID.Text+chr(39));
+MyQuery1.Open;
+//Ведение лога
+S:= 'Insert into log(idtask, Name, Zapis, Vrem) Values ('+ chr(39)+edID.Text+chr(39)+
+', '+chr(39)+UserName+chr(39)+', '+chr(39)+'Задача выполнена, ожидается проверка: '
++edZaglav.Text+'; Формулировка: '+memTask.Lines.Text+'; Назначивший: '+
+edMaster.Text+'; Дата начала: '+formatdatetime('yyy-mm-dd',MyQuery1.FieldValues['Data_sozd'])+'; Дата выполнения: '+
+formatdatetime('yyy-mm-dd',dtVupol.Date)+'; Комментарий: '+memComment.Lines.Text+chr(39)+', NOW());';
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+
+formRedTask.Hide;
+formOper.MyQuery1.Close;
+formOper.MyQuery1.SQL.Clear;
+if MasterRole then formOper.MyQuery1.SQL.add('SELECT id, Stat, Zaglav, Operator, Task, Data_sozd, Data_vyp, Comment FROM zadachi WHERE Mast = '+chr(39)+UserName+chr(39));
+formOper.MyQuery1.Open;
+formOper.DBGrid1.Columns[0].Width:=25;     //ИД
+formOper.DBGrid1.Columns[1].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;     //Статус
+formOper.DBGrid1.Columns[2].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    //Заголовок
+formOper.DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
+formOper.DBGrid1.Columns[4].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Задача
+formOper.DBGrid1.Columns[5].Width:=100;    // Дата создания
+formOper.DBGrid1.Columns[6].Width:=100;    // Дата выполнения
+formOper.DBGrid1.Columns[7].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Коментарий
+end;
+
+procedure TformRedTask.btnOKClick(Sender: TObject);
+Var S:String;
+begin
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+S:= 'UPDATE zadachi Set Stat = ''Выполнено'', '+
+' Comment = '+chr(39)+memComment.Lines.Text+chr(39)+' WHERE ID = '+ chr(39)+edID.Text+chr(39);
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+//Получение даты
+MyQuery1.SQL.Add('Select Data_sozd from zadachi where ID ='+ chr(39)+edID.Text+chr(39));
+MyQuery1.Open;
+//Ведение лога
+S:= 'Insert into log(idtask, Name, Zapis, Vrem) Values ('+ chr(39)+edID.Text+chr(39)+
+', '+chr(39)+UserName+chr(39)+', '+chr(39)+'Задача выполнена: '
++edZaglav.Text+'; Формулировка: '+memTask.Lines.Text+'; Назначена на: '+
+edMaster.Text+'; Дата начала: '+formatdatetime('yyy-mm-dd',MyQuery1.FieldValues['Data_sozd'])+'; Дата выполнения: '+
+formatdatetime('yyy-mm-dd',dtVupol.Date)+'; Комментарий: '+memComment.Lines.Text+chr(39)+', NOW());';
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+
+formRedTask.Hide;
+formOper.MyQuery1.Close;
+formOper.MyQuery1.SQL.Clear;
+if OperRole then formOper.MyQuery1.SQL.add('SELECT id, Stat, Zaglav, Mast, Task, Data_sozd, Data_vyp, Comment FROM zadachi WHERE Operator = '+chr(39)+UserName+chr(39));
+formOper.MyQuery1.Open;
+formOper.DBGrid1.Columns[0].Width:=25;     //ИД
+formOper.DBGrid1.Columns[1].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;     //Статус
+formOper.DBGrid1.Columns[2].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    //Заголовок
+formOper.DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
+formOper.DBGrid1.Columns[4].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Задача
+formOper.DBGrid1.Columns[5].Width:=100;    // Дата создания
+formOper.DBGrid1.Columns[6].Width:=100;    // Дата выполнения
+formOper.DBGrid1.Columns[7].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Коментарий
+end;
+
+procedure TformRedTask.btnRejectClick(Sender: TObject);
+Var S:String;
+begin
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+S:= 'UPDATE zadachi Set Stat = ''Возвращено на доработку'', '+
+' Comment = '+chr(39)+memComment.Lines.Text+chr(39)+' WHERE ID = '+ chr(39)+edID.Text+chr(39);
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+//Получение даты
+MyQuery1.SQL.Add('Select Data_sozd from zadachi where ID ='+ chr(39)+edID.Text+chr(39));
+MyQuery1.Open;
+//Ведение лога
+S:= 'Insert into log(idtask, Name, Zapis, Vrem) Values ('+ chr(39)+edID.Text+chr(39)+
+', '+chr(39)+UserName+chr(39)+', '+chr(39)+'Задача возвращена на доработку: '
++edZaglav.Text+'; Формулировка: '+memTask.Lines.Text+'; Назначивший: '+
+edMaster.Text+'; Дата начала: '+formatdatetime('yyy-mm-dd',MyQuery1.FieldValues['Data_sozd'])+'; Дата выполнения: '+
+formatdatetime('yyy-mm-dd',dtVupol.Date)+'; Комментарий: '+memComment.Lines.Text+chr(39)+', NOW());';
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+
+formOper.MyQuery1.Close;
+formOper.MyQuery1.SQL.Clear;
+if MasterRole then formOper.MyQuery1.SQL.add('SELECT id, Stat, Zaglav, Operator, Task, Data_sozd, Data_vyp, Comment FROM zadachi WHERE Mast = '+chr(39)+UserName+chr(39));
+formOper.MyQuery1.Open;
+formOper.DBGrid1.Columns[0].Width:=25;     //ИД
+formOper.DBGrid1.Columns[1].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;     //Статус
+formOper.DBGrid1.Columns[2].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    //Заголовок
+formOper.DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
+formOper.DBGrid1.Columns[4].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Задача
+formOper.DBGrid1.Columns[5].Width:=100;    // Дата создания
+formOper.DBGrid1.Columns[6].Width:=100;    // Дата выполнения
+formOper.DBGrid1.Columns[7].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Коментарий
+formRedTask.Hide;
+end;
+
+procedure TformRedTask.btnResendClick(Sender: TObject);
+Var S:String;
+begin
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+S:= 'UPDATE zadachi Set Zaglav = '+chr(39)+edZaglav.Text+chr(39)+', '+
+' Task = '+chr(39)+memTask.Lines.Text+chr(39)+', '+
+' Data_vyp = '+chr(39)+formatdatetime('yyy-mm-dd',dtVupol.Date)+chr(39)+', '+
+' Stat = ''Направлен в цех на исполнение'', '+
+' Comment = '''' WHERE ID = '+ chr(39)+edID.Text+chr(39);
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+//Получение даты
+MyQuery1.SQL.Add('Select Data_sozd from zadachi where ID ='+ chr(39)+edID.Text+chr(39));
+MyQuery1.Open;
+//Ведение лога
+S:= 'Insert into log(idtask, Name, Zapis, Vrem) Values ('+ chr(39)+edID.Text+chr(39)+
+', '+chr(39)+UserName+chr(39)+', '+chr(39)+'Задача назначена повторно: '
++edZaglav.Text+'; Формулировка: '+memTask.Lines.Text+'; Назначена на: '+
+edMaster.Text+'; Дата начала: '+formatdatetime('yyy-mm-dd',MyQuery1.FieldValues['Data_sozd'])+'; Дата выполнения: '+
+formatdatetime('yyy-mm-dd',dtVupol.Date)+'; Комментарий: '+memComment.Lines.Text+chr(39)+', NOW());';
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+MyQuery1.SQL.Add(S);
+MyQuery1.ExecSQL;
+MyQuery1.Close;
+MyQuery1.SQL.Clear;
+
+formRedTask.Hide;
+formOper.MyQuery1.Close;
+formOper.MyQuery1.SQL.Clear;
+if OperRole then formOper.MyQuery1.SQL.add('SELECT id, Stat, Zaglav, Mast, Task, Data_sozd, Data_vyp, Comment FROM zadachi WHERE Operator = '+chr(39)+UserName+chr(39));
+formOper.MyQuery1.Open;
+formOper.DBGrid1.Columns[0].Width:=25;     //ИД
+formOper.DBGrid1.Columns[1].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;     //Статус
+formOper.DBGrid1.Columns[2].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    //Заголовок
+formOper.DBGrid1.Columns[3].Width:=70;     //Оператор или мастер
+formOper.DBGrid1.Columns[4].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Задача
+formOper.DBGrid1.Columns[5].Width:=100;    // Дата создания
+formOper.DBGrid1.Columns[6].Width:=100;    // Дата выполнения
+formOper.DBGrid1.Columns[7].Width:=trunc((formOper.DBGrid1.Width-295)/4)-10;    // Коментарий
+end;
+
+procedure TformRedTask.FormShow(Sender: TObject);
+begin
+if OperRole then
+  begin
+  btnResend.Visible:=True;
+  btnOK.Visible:=true;
+  btnAccept.Visible:=false;
+  btnReject.Visible:=false;
+  btnComplete.Visible:=false;
+  end;
+
+if MasterRole then
+  begin
+  btnResend.Visible:=False;
+  btnOK.Visible:=False;
+  btnAccept.Visible:=True;
+  btnReject.Visible:=True;
+  btnComplete.Visible:=True;
+  end;
+
+end;
+
+end.
